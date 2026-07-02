@@ -98,4 +98,26 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+// En tu practicaRoutes.js (o controlador equivalente)
+router.get('/empresa/:id_empresa', async (req, res) => {
+    try {
+        const { id_empresa } = req.params;
+
+        // ¡ESTA ES LA VALIDACIÓN CLAVE!
+        if (id_empresa === "todas") {
+            // Si piden "todas", devolvemos todas las prácticas de la colección
+            const practicas = await Practica.find();
+            return res.json(practicas);
+        }
+
+        // Si no es "todas", se asume que es un ObjectId válido de una empresa específica
+        const practicas = await Practica.find({ id_empresa: id_empresa });
+        res.json(practicas);
+
+    } catch (error) {
+        console.error("Error al obtener prácticas de la empresa:", error);
+        res.status(500).json({ mensaje: "Error en el servidor" });
+    }
+});
+
 module.exports = router;
