@@ -96,6 +96,15 @@ router.put("/:id", async (req, res) => {
             error: error.message 
         });
     }
+});        
+// ELIMINAR UNA PRÁCTICA
+router.delete("/:id", async (req, res) => {
+    try {
+        await Practica.findByIdAndDelete(req.params.id);
+        res.status(200).json({ mensaje: "Oferta eliminada correctamente" });
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al eliminar", error: error.message });
+    }
 });
 
 // En tu practicaRoutes.js (o controlador equivalente)

@@ -65,4 +65,15 @@ router.get("/estudiante/:id_estudiante", async (req, res) => {
 
 });
 
+// Obtener postulaciones por ID de empresa
+router.get("/empresa/:id_empresa", async (req, res) => {
+    try {
+        const { id_empresa } = req.params;
+        const lista = await Postulacion.find({ id_empresa: id_empresa });
+        res.status(200).json(lista);
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al obtener postulaciones", error: error.message });
+    }
+});
+
 module.exports = router;
