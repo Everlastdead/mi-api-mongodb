@@ -45,7 +45,8 @@ router.post('/login', async (req, res) => {
                 nombre: estudiante.nombre,
                 correo: estudiante.correo,
                 rut: estudiante.rut,
-                id_estudiante: estudiante._id
+                id_estudiante: estudiante._id,
+                id_institucion: estudiante.id_institucion,
             } 
         });
 
