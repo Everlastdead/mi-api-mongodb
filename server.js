@@ -17,7 +17,9 @@ app.use('/api/estudiantes', require('./routes/estudianteRoutes'));
 // Cuando crees las rutas de empresas, solo agregarás esta línea:
 app.use('/api/empresas', require('./routes/empresaRoutes'));
 
-app.use("/api/practicas", require('./routes/practicaRoutes')); 
+app.use("/api/practicas", require('./routes/practicaRoutes'));
+
+app.use('/api/instituciones', require('./routes/institucionRoutes')); 
 // <-- 2. DILE A NODE QUE USE ESTA RUTA
 // 3. Levantar el servidor
 const PORT = process.env.PORT || 3000;

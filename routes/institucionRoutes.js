@@ -1,49 +1,40 @@
 const express = require("express");
 const router = express.Router();
-const Postulacion = require("../models/Postulacion");
+const Institucion = require("../models/Institucion");
 
+// REGISTRAR INSTITUCIÓN
 router.post("/", async (req, res) => {
-
     try {
-
-        const institucion = new Institucion(req.body);
-        await institucion.save();
-
-        res.status(201).json(institucion);
-
+        const nuevaInstitucion = new Institucion(req.body);
+        const saved = await nuevaInstitucion.save();
+        res.status(201).json({ mensaje: "¡Registro exitoso!", data: saved });
     } catch (error) {
-
-        console.error(error);
-
-        res.status(500).json({
-            mensaje: "Error al registrar la Institución"
-        });
-
+        res.status(400).json({ mensaje: "Error al registrar", error: error.message });
     }
-
 });
 
-
-
-router.get("/estudiante/:id_estudiante", async (req, res) => {
-
+// LOGIN INSTITUCIÓN
+router.post("/login", async (req, res) => {
     try {
+        const { rut, contrasena } = req.body;
+        const inst = await Institucion.findOne({ rut: rut });
 
-        const { id_estudiante } = req.params;
-        const postulaciones = await Postulacion.find({ id_estudiante: id_estudiante });
+        if (!inst || inst.contrasena !== contrasena) {
+            return res.status(401).json({ mensaje: "RUT o contraseña incorrectos" });
+        }
 
-        res.json(postulaciones);
-
-    } catch (error) {
-
-        console.error(error);
-        res.status(500).json({
-            mensaje: "Error al obtener postulaciones"
+        res.status(200).json({ 
+            mensaje: "Login exitoso", 
+            usuario: {
+                id_institucion: inst._id,
+                nombre: inst.nombre,
+                rut: inst.rut,
+                correo: inst.correo
+            } 
         });
-
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error en el servidor" });
     }
-
 });
-
 
 module.exports = router;

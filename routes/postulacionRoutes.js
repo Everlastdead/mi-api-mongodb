@@ -76,4 +76,20 @@ router.get("/empresa/:id_empresa", async (req, res) => {
     }
 });
 
+// OBTENER POSTULACIONES DE ALUMNOS DE UNA INSTITUCIÓN
+// Esta ruta responde a: GET /api/postulaciones/institucion/:id_institucion
+router.get("/institucion/:id_institucion", async (req, res) => {
+    try {
+        // 1. Buscamos los IDs de todos los alumnos que pertenecen a esa institución
+        const alumnos = await Estudiante.find({ id_institucion: req.params.id_institucion }).select('_id');
+        const ids = alumnos.map(a => a._id);
+
+        // 2. Buscamos todas las postulaciones hechas por esos alumnos
+        const postulaciones = await Postulacion.find({ id_estudiante: { $in: ids } });
+        res.json(postulaciones);
+    } catch (error) {
+        res.status(500).json({ mensaje: "Error al obtener actividad", error: error.message });
+    }
+});
+
 module.exports = router;
